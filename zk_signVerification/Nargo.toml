@@ -1,0 +1,6 @@
+[package]
+name = "zk_signVerification"
+type = "bin"
+authors = ["Samanta Karmaker"]
+
+[dependencies]
