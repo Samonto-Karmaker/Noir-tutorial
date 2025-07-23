@@ -1,0 +1,19 @@
+# Noir build outputs
+/target/
+*.json
+*.gz
+*.proof
+*.vk
+
+# Node artifacts
+/node_modules/
+/dist/
+/build/
+npm-debug.log*
+yarn-error.log
+
+# IDE & system temp files
+.vscode/
+.DS_Store
+*~
+*.swp
