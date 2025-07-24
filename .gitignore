@@ -1,5 +1,7 @@
 # Noir build outputs
-/target/
+**/target/
+*/target/
+target/
 *.json
 *.gz
 *.proof
