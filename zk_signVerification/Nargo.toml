@@ -4,4 +4,4 @@ type = "bin"
 authors = ["Samanta Karmaker"]
 
 [dependencies]
-ecrecover = {tag = "v0.30.0", git = "https://github.com/colinnielsen/ecrecover-noir"}
+ecrecover = {tag = "main", git = "https://github.com/colinnielsen/ecrecover-noir"}
