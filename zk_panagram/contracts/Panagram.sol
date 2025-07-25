@@ -64,7 +64,6 @@ contract Panagram is ERC1155, Ownable {
         emit Panagram__NewRoundStarted(s_currentRound, s_roundStartTime);
     }
 
-
     function makeGuess(bytes memory _proof) external returns (bool) {
         // Input validation
         if (s_currentRound == 0) {
@@ -88,7 +87,7 @@ contract Panagram is ERC1155, Ownable {
         // Handle rewards
         bool isWinner = s_currentRoundWinner == address(0);
         uint256 tokenId;
-        
+
         if (isWinner) {
             s_currentRoundWinner = msg.sender;
             s_winnerWins[msg.sender]++;
@@ -96,11 +95,16 @@ contract Panagram is ERC1155, Ownable {
         } else {
             tokenId = PARTICIPANT_TOKEN_ID;
         }
-        
+
         // Mint NFT reward
-        _mint(msg.sender, tokenId, 1, ""); 
-        emit Panagram__CorrectGuess(msg.sender, s_currentRound, isWinner, tokenId);
-        
+        _mint(msg.sender, tokenId, 1, "");
+        emit Panagram__CorrectGuess(
+            msg.sender,
+            s_currentRound,
+            isWinner,
+            tokenId
+        );
+
         return true;
     }
 
