@@ -2,7 +2,6 @@
 **/target/
 */target/
 target/
-*.json
 *.gz
 *.proof
 *.vk
