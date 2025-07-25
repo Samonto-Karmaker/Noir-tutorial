@@ -1,0 +1,6 @@
+[package]
+name = "zk_panagram"
+type = "bin"
+authors = [""]
+
+[dependencies]
