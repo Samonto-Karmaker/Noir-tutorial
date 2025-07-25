@@ -3,7 +3,7 @@ pragma solidity ^0.8.24;
 
 import "@openzeppelin/contracts/token/ERC1155/ERC1155.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
-import {IVerifier} from "./IVerifier.sol";
+import "./IVerifier.sol";
 
 contract Panagram is ERC1155, Ownable {
     IVerifier public s_verifier;
