@@ -74,8 +74,12 @@ contract Panagram is ERC1155, Ownable {
         }
 
         // Verify the proof
-        bytes32[] memory inputs = new bytes32[](1);
+        bytes32[] memory inputs = new bytes32[](2);
         inputs[0] = s_correctAnswerHash;
+        // the double conversion is to ensure the address is correctly formatted
+        // as a bytes32 from a 20-byte address to a 20 * 8 bit number to a 32 byte number
+        // and then back to bytes32
+        inputs[1] = bytes32(uint256(uint160(msg.sender)));
         bool isProofValid = s_verifier.verify(_proof, inputs);
         if (!isProofValid) {
             revert Panagram__InvalidProof();
