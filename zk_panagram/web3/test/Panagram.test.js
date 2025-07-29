@@ -58,7 +58,7 @@ describe("Panagram Contract with Zero Knowledge Proof", function () {
                     result.trim().length
                 } characters)`
             )
-            // Return the ABI-encoded proof from the generation script
+            // Return the hexlified proof from the generation script
             return result.trim()
         } catch (error) {
             console.error(`❌ Proof generation failed: ${error.message}`)
