@@ -101,7 +101,7 @@ contract IncrementalMerkleTree {
 
     // === Main internal logic for inheritance ===
 
-    function _insert(bytes32 leaf) internal returns (bytes32) {
+    function _insert(bytes32 leaf) internal returns (uint256) {
         if (leaf == bytes32(0)) revert IncrementalMerkleTree__InvalidLeaf();
 
         if (currentLeafIndex >= (1 << TREE_DEPTH))
@@ -145,7 +145,7 @@ contract IncrementalMerkleTree {
             leaf,
             latestRoot
         );
-        return latestRoot;
+        return currentLeafIndex;
     }
 
     function getRoot() external view returns (bytes32) {
