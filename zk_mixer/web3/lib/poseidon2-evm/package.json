@@ -1,0 +1,28 @@
+{
+  "name": "poseidon2-evm",
+  "version": "1.0.0",
+  "description": "Solidity implementation of the Poseidon2 hash function for the EVM.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zemse/poseidon2-evm"
+  },
+  "scripts": {
+    "test": "forge test"
+  },
+  "keywords": [
+    "solidity",
+    "evm",
+    "poseidon2",
+    "hash",
+    "foundry",
+    "zk"
+  ],
+  "author": "Soham Zemse",
+  "license": "MIT",
+  "files": [
+    "src",
+    "out/IPoseidon2.sol/IPoseidon2.json",
+    "out/Poseidon2.sol/Poseidon2.json",
+    "out/Poseidon2Yul.sol/Poseidon2Yul.json"
+  ]
+}
