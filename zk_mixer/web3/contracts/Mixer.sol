@@ -9,6 +9,7 @@ contract Mixer is IncrementalMerkleTree {
     uint256 public constant DEPOSIT_AMOUNT = 0.001 ether;
 
     mapping(bytes32 => bool) public s_commitments;
+    mapping(bytes32 => bool) public s_nullifierHashes;
 
     event Mixer__Deposit(
         bytes32 indexed commitment,
@@ -21,6 +22,8 @@ contract Mixer is IncrementalMerkleTree {
         uint256 amountSent,
         uint256 requiredAmount
     );
+    error Mixer__NullifierAlreadyUsed(bytes32 nullifierHash);
+    error Mixer__UnknownRoot(bytes32 root);
 
     constructor(
         IVerifier _verifier,
@@ -42,7 +45,18 @@ contract Mixer is IncrementalMerkleTree {
         emit Mixer__Deposit(_commitment, leafIndex, block.timestamp);
     }
 
-    function withdraw() external {
-        // Implement withdrawal logic
+    function withdraw(
+        bytes _proof,
+        bytes32 _root,
+        bytes32 _nullifierHash
+    ) external {
+        if (s_nullifierHashes[_nullifierHash]) {
+            revert Mixer__NullifierAlreadyUsed(_nullifierHash);
+        }
+        if (!isKnownRoot(_root)) {
+            revert Mixer__UnknownRoot(_root);
+        }
+
+        s_nullifierHashes[_nullifierHash] = true;
     }
 }
