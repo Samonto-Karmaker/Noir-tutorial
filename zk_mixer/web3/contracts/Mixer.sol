@@ -1,10 +1,11 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.28;
 
-import {IVerifier} from "./IVerifier.sol";
+import {IVerifier} from "./Verifier.sol";
 import {IncrementalMerkleTree} from "./IncrementalMerkleTree.sol";
+import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
-contract Mixer is IncrementalMerkleTree {
+contract Mixer is IncrementalMerkleTree, ReentrancyGuard {
     IVerifier public immutable i_verifier;
     uint256 public constant DEPOSIT_AMOUNT = 0.001 ether;
 
@@ -13,7 +14,12 @@ contract Mixer is IncrementalMerkleTree {
 
     event Mixer__Deposit(
         bytes32 indexed commitment,
-        uint256 indexed leafIndex,
+        uint256 leafIndex,
+        uint256 timestamp
+    );
+    event Mixer__Withdraw(
+        address indexed recipient,
+        bytes32 nullifierHash,
         uint256 timestamp
     );
 
@@ -24,6 +30,8 @@ contract Mixer is IncrementalMerkleTree {
     );
     error Mixer__NullifierAlreadyUsed(bytes32 nullifierHash);
     error Mixer__UnknownRoot(bytes32 root);
+    error Mixer__InvalidProof();
+    error Mixer__WithdrawFailed(address recipient);
 
     constructor(
         IVerifier _verifier,
@@ -32,7 +40,7 @@ contract Mixer is IncrementalMerkleTree {
         i_verifier = _verifier;
     }
 
-    function deposit(bytes32 _commitment) external payable {
+    function deposit(bytes32 _commitment) external payable nonReentrant {
         if (s_commitments[_commitment]) {
             revert Mixer__CommitmentAlreadyExists(_commitment);
         }
@@ -46,10 +54,11 @@ contract Mixer is IncrementalMerkleTree {
     }
 
     function withdraw(
-        bytes _proof,
+        bytes calldata _proof,
         bytes32 _root,
-        bytes32 _nullifierHash
-    ) external {
+        bytes32 _nullifierHash,
+        address payable _recipient
+    ) external nonReentrant {
         if (s_nullifierHashes[_nullifierHash]) {
             revert Mixer__NullifierAlreadyUsed(_nullifierHash);
         }
@@ -57,6 +66,20 @@ contract Mixer is IncrementalMerkleTree {
             revert Mixer__UnknownRoot(_root);
         }
 
+        bytes32[] memory publicInputs = new bytes32[](3);
+        publicInputs[0] = _root;
+        publicInputs[1] = _nullifierHash;
+        publicInputs[2] = bytes32(uint256(uint160(address(_recipient))));
+        if (!i_verifier.verify(_proof, publicInputs)) {
+            revert Mixer__InvalidProof();
+        }
+
         s_nullifierHashes[_nullifierHash] = true;
+        (bool success, ) = _recipient.call{value: DEPOSIT_AMOUNT}("");
+        if (!success) {
+            revert Mixer__WithdrawFailed(_recipient);
+        }
+
+        emit Mixer__Withdraw(_recipient, _nullifierHash, block.timestamp);
     }
 }

@@ -148,7 +148,7 @@ contract IncrementalMerkleTree {
         return currentLeafIndex;
     }
 
-    function getRoot() external view returns (bytes32) {
+    function getRoot() public view returns (bytes32) {
         return latestRoot;
     }
 
@@ -157,7 +157,7 @@ contract IncrementalMerkleTree {
      * @param level The level to query
      * @return The filled subtree hash at that level
      */
-    function getFilledSubtree(uint256 level) external view returns (bytes32) {
+    function getFilledSubtree(uint256 level) public view returns (bytes32) {
         return filledSubtrees[level];
     }
 
@@ -166,7 +166,7 @@ contract IncrementalMerkleTree {
      * @param index The history index to query
      * @return The root at that index
      */
-    function getRootAtIndex(uint256 index) external view returns (bytes32) {
+    function getRootAtIndex(uint256 index) public view returns (bytes32) {
         return rootHistory[index];
     }
 
@@ -175,7 +175,7 @@ contract IncrementalMerkleTree {
      * @param _root The root to check
      * @return True if the root is known
      */
-    function isKnownRoot(bytes32 _root) external view returns (bool) {
+    function isKnownRoot(bytes32 _root) public view returns (bool) {
         if (_root == bytes32(0)) {
             return false;
         }
@@ -205,7 +205,7 @@ contract IncrementalMerkleTree {
      */
     function getPrecomputedZeroHash(
         uint256 level
-    ) external pure returns (bytes32) {
+    ) public pure returns (bytes32) {
         if (level == 0)
             return
                 bytes32(
@@ -369,7 +369,7 @@ contract IncrementalMerkleTree {
         else revert IncrementalMerkleTree__LevelExceedsTreeDepth(level, 32);
     }
 
-    function getZeroHash(uint256 level) external view returns (bytes32) {
+    function getZeroHash(uint256 level) public view returns (bytes32) {
         if (level >= TREE_DEPTH)
             revert IncrementalMerkleTree__LevelExceedsTreeDepth(
                 level,
@@ -387,15 +387,15 @@ contract IncrementalMerkleTree {
         return currentZero;
     }
 
-    function isFull() external view returns (bool) {
+    function isFull() public view returns (bool) {
         return currentLeafIndex >= (1 << TREE_DEPTH);
     }
 
-    function getCapacity() external view returns (uint256) {
+    function getCapacity() public view returns (uint256) {
         return 1 << TREE_DEPTH;
     }
 
-    function getLeafCount() external view returns (uint256) {
+    function getLeafCount() public view returns (uint256) {
         return currentLeafIndex;
     }
 
@@ -403,7 +403,7 @@ contract IncrementalMerkleTree {
      * @dev Get all current root history (useful for frontend)
      * @return Array of historical roots
      */
-    function getRootHistory() external view returns (bytes32[] memory) {
+    function getRootHistory() public view returns (bytes32[] memory) {
         bytes32[] memory roots = new bytes32[](ROOT_HISTORY_SIZE);
         for (uint32 i = 0; i < ROOT_HISTORY_SIZE; ) {
             roots[i] = rootHistory[i];
@@ -418,7 +418,7 @@ contract IncrementalMerkleTree {
      * @dev Get the current root index in the history
      * @return The current root index
      */
-    function getCurrentRootIndex() external view returns (uint32) {
+    function getCurrentRootIndex() public view returns (uint32) {
         return currentRootIndex;
     }
 }
