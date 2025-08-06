@@ -11,7 +11,7 @@ use dep::poseidon::poseidon2;
  *                 - false: current node is right child (odd position)
  * @return The computed Merkle root
  */
-fn compute_merkle_root(leaf: Field, merkle_proof: [Field; 20], is_even: [bool; 20]) -> Field {
+pub fn compute_merkle_root(leaf: Field, merkle_proof: [Field; 20], is_even: [bool; 20]) -> Field {
     // Start with the leaf as our current hash; it's a mutable variable
     let mut current_hash: Field = leaf;
     
